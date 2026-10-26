@@ -1,7 +1,9 @@
 # Déploiement — GitHub Pages
 
-> **Statut : NON CONFIGURÉ, NON VÉRIFIÉ.** Le workflow de build sera ajouté au début de la Phase 2.
-> Je n'ai pas accès aux réglages du dépôt (la CLI `gh` n'est pas installée), donc l'état ci-dessous est à confirmer par toi.
+> **Statut (vérifié le 2026-10-26) :**
+> - Le workflow `.github/workflows/deploy.yml` **réussit** : assets, contrôle, typecheck, tests unitaires, build, tests e2e WebKit et Chromium, publication.
+> - `https://erwannn007.github.io/waves_87764598/` sert le **build de production**. Les tests e2e passent **contre l'URL publiée** (`E2E_BASE_URL=… npx playwright test`).
+> - ⚠️ Le déploiement automatique **« pages build and deployment » (Jekyll, depuis la branche)** tourne encore à chaque push. La source Pages n'est donc probablement pas encore réglée sur « GitHub Actions ». Les deux publications se concurrencent : si Jekyll passe en dernier, il publie le `index.html` **source**, que le navigateur ne peut pas exécuter, et le jeu ne se charge pas. **La bascule ci-dessous reste nécessaire.**
 
 ## Réglages à faire dans GitHub (par toi, une seule fois)
 

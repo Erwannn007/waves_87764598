@@ -111,6 +111,17 @@ tools/assets/                       # contrôles et empaquetage (Phase 2)
 
 Nommage : `<id>_<animation>_<direction>_<image>.png`, par exemple `survivor_walk_SE_03.png`, en minuscules sans accents. Les directions s'écrivent en majuscules : `S SE E NE N NW W SW`.
 
+## 7. Pipeline hybride opérationnel (Phase 2)
+
+Commande : `npm run assets` (export) et `npm run assets:check` (contrôle). Les deux s'exécutent automatiquement avant chaque build et en CI.
+
+1. **Maquettes :** `npm run art:blockout` écrit chaque image de maquette dans `assets-src/characters/<feuille>/blockout/<anim>_<DIR>_<nn>.png`. Les feuilles sont `survivor_legs`, `survivor_upper` et `rodeur`. Ces fichiers ne sont pas versionnés, car ils se régénèrent.
+2. **Retouche :** on copie une image dans `assets-src/characters/<feuille>/art/` sous **le même nom** et on la redessine dans un éditeur pixel art, à la même taille de cadre, au même point d'ancrage et avec la palette Cendres.
+3. **Remplacement automatique :** à l'export suivant, l'image retouchée **remplace** la maquette dans la feuille. L'export indique le nombre d'images retouchées. Aucune modification du code du jeu n'est nécessaire.
+4. **Contrôle :** `assets:check` refuse les couleurs hors palette, l'alpha non binaire, les images vides et les sprites qui touchent le bord du cadre (rognés).
+
+Cadres actuels (hypothèse ~40 px, **non figés**) : survivant 76×60 (ancre 38,54), Rôdeur 112×80 (ancre 56,52), tuiles 64×32.
+
 ## 6. Ce que je recommande de décider maintenant
 
 1. **Méthode des personnages :** hybride 2a (toi dans un éditeur sur la maquette), 2b (IA externe + nettoyage), 2c (artiste) ou 2d (programmatique poussé, qualité plafonnée).

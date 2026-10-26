@@ -4,6 +4,18 @@ Le prototype est **accepté** quand tous les critères ✅ obligatoires sont vé
 
 Légende : **[A]** test automatisé · **[M]** vérification manuelle sur appareil · **[V]** ta validation artistique
 
+## État au 2026-10-26 (prototype 0.2 publié)
+
+| Critères | État |
+|---|---|
+| P1, P4, C4, G1, G2, G3, G6 (logique), R4, E1, E2, F2 (taille) | ✅ vérifiés automatiquement (CI + tests contre l'URL publiée) |
+| C1, C2, C3 (multi-touch) | ✅ en émulation Chromium ; ⏳ **à confirmer sur ton téléphone** |
+| P2, P3, P5, C5, G4, G5, R1, R2, R3, R5, F1, F3 | ⏳ à vérifier sur appareil (`docs/TESTING.md`) |
+| R6 (direction artistique) | ⏳ **ta validation**. Les sprites sont encore des maquettes programmatiques. |
+| E3 (documentation) | ✅ |
+
+Build initial : 400 Ko gzip de JavaScript, plus environ 150 Ko d'images. Mesure ponctuelle : ≈ 60 images/s avec 20 Rôdeurs (Chromium sur Mac, pas sur téléphone).
+
 ## 1. Accès et plateforme
 
 | # | Critère | Vérif. |

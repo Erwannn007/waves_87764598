@@ -1,8 +1,21 @@
 # Bible artistique — Waves
 
-- **Version :** 0.1 (Phase 1)
-- **Statut : PROPOSITION, en attente de validation.** Les sections marquées 🔒 seront figées après validation du prototype (Phase 2). Avant cela, tout est révisable.
+- **Version :** 0.2 (Phase 2)
+- **Statut :** direction choisie le 2026-10-26 (proposition B). Les dimensions ne sont **pas encore figées** : elles le seront après le test de lisibilité sur téléphone. Les sections marquées 🔒 seront figées à la validation du prototype.
 - **Planches de référence :** [`docs/art/phase1/`](art/phase1/README.md)
+
+## ✅ Décisions validées (2026-10-26)
+
+| Sujet | Décision | Remarque |
+|---|---|---|
+| Perspective | **Isométrique 2:1, sol en losanges** (caméra inclinée de 30°, tournée de 45°) | La vue 3/4 à grille droite est abandonnée pour la direction principale. |
+| Palette | **Cendres** : sombre, désaturée, post-apocalyptique ; Rôdeurs verdâtres, énergie verte | Interface alignée sur cette ambiance (`src/ui/theme.ts`). |
+| Personnages | **~40 px** comme hypothèse de départ | À valider sur téléphone avec le bouton TAILLE, avant de figer. |
+| Contour | Sélectif (couleur plus sombre que la teinte de l'objet) | Celui de la proposition B. |
+| Production | **Pipeline hybride** : maquette programmatique, passe artistique sur les images clés, contrôle automatique | Les sprites du prototype sont encore des maquettes. |
+| Grille | Tuile = 1,5 m = **64×32 px** (≈ 30,17 px/m) | Hypothèse liée aux 40 px, révisable. |
+
+Les sections 2 et 3 ci-dessous gardent la comparaison historique entre 3/4 et iso.
 
 ---
 
@@ -31,7 +44,7 @@ Trois piliers :
 | Production d'assets | Plus simple : façades de face | Chaque objet doit être dessiné en diagonale |
 | Rendu | Plus « shooter vu de dessus » | Plus « diorama », plus riche en volume |
 
-**Recommandation : 3/4 orthogonal.** C'est le meilleur compromis pour un shooter à double joystick avec un système de construction. L'iso 2:1 est plus beau en image fixe, mais il coûte plus cher en production et rend les contrôles et le placement moins lisibles.
+~~Recommandation : 3/4 orthogonal.~~ **Décision : iso 2:1** (voir plus haut). Argument initial en faveur du 3/4 : c'est le meilleur compromis pour un shooter à double joystick avec un système de construction. L'iso 2:1 est plus beau en image fixe, mais il coûte plus cher en production et rend les contrôles et le placement moins lisibles.
 
 ### 2.2 Perspective « trichée » des personnages (proposée)
 
@@ -104,7 +117,7 @@ Deux palettes candidates (voir `palettes-x3.png`), structurées en rampes de 4 t
 | Rôdeurs | Peau gris-violet, énergie **violette** | Peau verdâtre, énergie **verte** |
 | Lisibilité du joueur | Excellente (orange contre violet et vert) | Bonne, un peu moins de contraste |
 
-**Recommandation : Tempête.** C'est l'esprit « tempête violette » voulu, avec le meilleur contraste joueur/ennemis.
+~~Recommandation : Tempête.~~ **Décision : Cendres.** Le contraste joueur/ennemis est obtenu par l'orange du survivant face au vert maladif des Rôdeurs et à leurs yeux luminescents.
 
 **Règles de couleur proposées 🔒 :**
 

@@ -9,6 +9,8 @@ L'interface est **dessinée en pixel art dans le canvas du jeu**, à la même r�
 
 ## 1. Jetons de couleur
 
+> **Variante « Cendres » en vigueur (2026-10-26)**, définie dans `src/ui/theme.ts` : fonds brun-noir (`panel #221e1a`, `panelRaised #332d27`, `bevel #4d443a`), texte sable (`#ece4d0`), **sélection et focus en vert maladif** (`accent #6f8f3e`, `accentLight #c9e08a`), action principale en orange (`#c8612a`). Le tableau ci-dessous est la version violette de la Phase 1, conservée pour mémoire.
+
 | Jeton | Valeur | Usage |
 |---|---|---|
 | `ink` | `#0d0a14` | contours de l'UI, texte sur fond clair |
@@ -103,7 +105,8 @@ Sur un écran tactile, il n'y a **pas de survol**. L'état « pressé » s'affic
 └──────────────────────────────────────────────────────────────┘
 ```
 
-- Avec le joystick droit, **viser tire automatiquement** au-delà de 70 % d'inclinaison (comme la plupart des shooters à double joystick). Le bouton TIR reste disponible pour le tir manuel. **À valider en Phase 2.**
+- **Implémenté dans le prototype :** le bouton **TIR est aussi un joystick de visée**. Le toucher déclenche le tir, glisser depuis TIR oriente le tir, et toucher ailleurs dans la moitié droite vise sans tirer. L'**auto-tir** (option AUTO) tire dès que le joystick de visée dépasse 70 %. Les deux modes sont à comparer sur téléphone.
+- Proposition initiale : avec le joystick droit, **viser tire automatiquement** au-delà de 70 % d'inclinaison (comme la plupart des shooters à double joystick). Le bouton TIR reste disponible pour le tir manuel. **À valider en Phase 2.**
 - Au clavier et à la souris : ZQSD/WASD pour se déplacer, la souris pour viser, clic gauche pour tirer, R pour recharger, 1 à 4 pour les armes, E pour interagir.
 
 ## 9. Écrans à concevoir (Phase 7)
