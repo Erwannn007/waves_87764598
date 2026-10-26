@@ -3,9 +3,9 @@
 > **Statut (vérifié le 2026-10-26) :**
 > - Le workflow `.github/workflows/deploy.yml` **réussit** : assets, contrôle, typecheck, tests unitaires, build, tests e2e WebKit et Chromium, publication.
 > - `https://erwannn007.github.io/waves_87764598/` sert le **build de production**. Les tests e2e passent **contre l'URL publiée** (`E2E_BASE_URL=… npx playwright test`).
-> - ⚠️ Le déploiement automatique **« pages build and deployment » (Jekyll, depuis la branche)** tourne encore à chaque push. La source Pages n'est donc probablement pas encore réglée sur « GitHub Actions ». Les deux publications se concurrencent : si Jekyll passe en dernier, il publie le `index.html` **source**, que le navigateur ne peut pas exécuter, et le jeu ne se charge pas. **La bascule ci-dessous reste nécessaire.**
+> - ✅ Source Pages basculée sur **GitHub Actions** (2026-10-26). Depuis le commit `b4f016a`, le déploiement Jekyll ne tourne plus. Auparavant, il publiait par intermittence le `index.html` source.
 
-## Réglages à faire dans GitHub (par toi, une seule fois)
+## Réglages GitHub (faits le 2026-10-26)
 
 1. Ouvre `https://github.com/Erwannn007/waves_87764598/settings/pages`.
 2. **Build and deployment → Source** : choisis **GitHub Actions** (et non « Deploy from a branch »).

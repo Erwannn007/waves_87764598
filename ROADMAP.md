@@ -60,4 +60,4 @@ Consolider à partir du prototype : chargement de plusieurs cartes, tuiles de ra
 Voir `docs/PROJECT_AUDIT.md` § 8 et `docs/PROMPT_MAITRE.md` § 16.
 
 ## Problèmes connus
-Voir [`docs/KNOWN_LIMITATIONS.md`](docs/KNOWN_LIMITATIONS.md). Point bloquant : le déploiement Jekyll « depuis la branche » tourne encore en parallèle (voir `docs/DEPLOYMENT.md`).
+Voir [`docs/KNOWN_LIMITATIONS.md`](docs/KNOWN_LIMITATIONS.md).
