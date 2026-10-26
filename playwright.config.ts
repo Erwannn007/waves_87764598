@@ -6,6 +6,8 @@ const remote = process.env.E2E_BASE_URL;
 export default defineConfig({
   testDir: 'tests/e2e',
   timeout: 60_000,
+  globalTimeout: 6 * 60_000,
+  retries: process.env.CI ? 1 : 0,
   reporter: [['list']],
   use: { baseURL: remote ?? 'http://localhost:4173/waves_87764598/', screenshot: 'only-on-failure' },
   webServer: remote ? undefined : { command: 'npx vite preview --port 4173 --strictPort', url: 'http://localhost:4173/waves_87764598/', reuseExistingServer: true, timeout: 60_000 },

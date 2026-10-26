@@ -19,6 +19,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -32,8 +33,12 @@ jobs:
       - run: npm test
       - name: Build de production
         run: npx vite build
+      - name: Installation des navigateurs de test
+        timeout-minutes: 10
+        run: npx playwright install --with-deps chromium webkit
       - name: Tests navigateur (WebKit iPhone + Chromium Android)
-        run: npx playwright install --with-deps chromium webkit && npx playwright test
+        timeout-minutes: 8
+        run: npx playwright test
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
@@ -42,6 +47,7 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
