@@ -1,0 +1,20 @@
+{
+  "ar_scavenger": {
+    "name": "Fusil de récup",
+    "category": "assault",
+    "rarity": "uncommon",
+    "damage": 24,
+    "fireRate": 8,
+    "automatic": true,
+    "magazine": 30,
+    "reserve": 210,
+    "reloadTime": 1.9,
+    "spreadDeg": 4,
+    "range": 22,
+    "projectileSpeed": 48,
+    "knockback": 0.16,
+    "stagger": 24,
+    "structureDamage": 0.6,
+    "sfx": "shot_ar"
+  }
+}

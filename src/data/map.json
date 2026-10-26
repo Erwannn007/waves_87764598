@@ -1,0 +1,177 @@
+{
+ "name": "Carrefour (prototype)",
+ "width": 22,
+ "height": 22,
+ "legend": {
+  "g": "grass",
+  "d": "dirt",
+  "a": "asphalt",
+  "x": "asphalt_lx",
+  "y": "asphalt_ly",
+  "s": "sidewalk"
+ },
+ "tiles": [
+  "dgdggdgdsayasgddggdggg",
+  "gggdggddsayasgggggggdd",
+  "ggggggggsayasgggggggdg",
+  "gdgdggggsayasggggggdgd",
+  "gggggggdsayasgdddgdggg",
+  "dgggggdgsayasggdddgggd",
+  "gggggggdsayasgggdgdgdd",
+  "gdgddddgsayasdgdgggdgg",
+  "sssssssssayassssssssss",
+  "aaaaaaaaaaaaaaaaaaaaaa",
+  "xxxxxxxxxaaaxxxxxxxxxx",
+  "aaaaaaaaaaaaaaaaaaaaaa",
+  "sssssssssayassssssssss",
+  "ggddgggdsayasdggdgdggg",
+  "ggdgggggsayasggggggggd",
+  "dgggggggsayasggggggggg",
+  "gdggggdgsayasggggggddd",
+  "ggdggdgdsayasdgggggggg",
+  "ggggdgggsayasggggggdgg",
+  "dgdgggggsayasgdggggggg",
+  "ggggggggsayasgggggggdd",
+  "gdgdgggdsayasggdgggggg"
+ ],
+ "props": [
+  {
+   "id": "car",
+   "x": 7.6,
+   "y": 14.6
+  },
+  {
+   "id": "car_y",
+   "x": 16.9,
+   "y": 25.6
+  },
+  {
+   "id": "jersey",
+   "x": 23.2,
+   "y": 17.3
+  },
+  {
+   "id": "jersey_y",
+   "x": 14.2,
+   "y": 22.8
+  },
+  {
+   "id": "crate",
+   "x": 11.4,
+   "y": 11.3
+  },
+  {
+   "id": "crate_small",
+   "x": 12.6,
+   "y": 10.8
+  },
+  {
+   "id": "crate",
+   "x": 20.6,
+   "y": 20.4
+  },
+  {
+   "id": "barrel",
+   "x": 19.9,
+   "y": 11.4
+  },
+  {
+   "id": "barrel",
+   "x": 20.7,
+   "y": 11.9
+  },
+  {
+   "id": "tree_dead",
+   "x": 4.2,
+   "y": 4.1
+  },
+  {
+   "id": "tree_dead",
+   "x": 27.6,
+   "y": 5.2
+  },
+  {
+   "id": "tree_dead",
+   "x": 5.1,
+   "y": 27.4
+  },
+  {
+   "id": "tree_dead",
+   "x": 28.3,
+   "y": 28.1
+  },
+  {
+   "id": "tree_dead",
+   "x": 24.4,
+   "y": 23.6
+  },
+  {
+   "id": "lamp",
+   "x": 12.5,
+   "y": 12.5
+  },
+  {
+   "id": "lamp",
+   "x": 19.1,
+   "y": 19.1
+  },
+  {
+   "id": "rubble",
+   "x": 25.2,
+   "y": 12.8
+  },
+  {
+   "id": "rubble",
+   "x": 6.4,
+   "y": 20.3
+  },
+  {
+   "id": "barricade",
+   "x": 14.4,
+   "y": 7.4,
+   "hp": 260
+  },
+  {
+   "id": "barricade",
+   "x": 16.2,
+   "y": 7.4,
+   "hp": 260
+  },
+  {
+   "id": "barricade",
+   "x": 18.0,
+   "y": 7.4,
+   "hp": 260
+  }
+ ],
+ "player": {
+  "x": 15.75,
+  "y": 15.75
+ },
+ "spawns": [
+  {
+   "x": 2.0,
+   "y": 15.75
+  },
+  {
+   "x": 31.0,
+   "y": 15.75
+  },
+  {
+   "x": 15.75,
+   "y": 31.0
+  },
+  {
+   "x": 15.75,
+   "y": 2.0
+  },
+  {
+   "x": 2.5,
+   "y": 2.5
+  },
+  {
+   "x": 30.5,
+   "y": 30.5
+  }
+ ]
+}

@@ -29,6 +29,9 @@ const TEMPETE = {
   asphalt: ['#17171f', '#20212b', '#2a2b37', '#363846', '#444758'],
   sidewalk: ['#30303a', '#45454f', '#585a65', '#6c6e7a', '#82848f'],
   paint: ['#6e6440', '#8f8450', '#b8a95e', '#d8c870', '#efe08a'],
+  rust: ['#3a1d14', '#6b3420', '#9a5530', '#c27a45'],
+  glass: ['#1b2630', '#2c4250', '#4a6a78', '#8fb0b8'],
+  dirt: ['#2a2119', '#3d3024', '#54432f', '#6b5740', '#85704f'],
   white: ['#ffffff', '#ffffff', '#ffffff', '#ffffff'],
 };
 
@@ -67,6 +70,7 @@ function build(src, transform = (c) => c, overrides = {}) {
   for (const [name, ramp] of Object.entries({ ...src, ...overrides })) {
     const r = ramp.map((c) => (overrides[name] ? hex(c) : transform(hex(c))));
     mats[name] = { ramp: r, outline: outlineOf(r[0]) };
+    if (r.length > 4) mats[name].noOutline = true; // rampes de sol
   }
   for (const n of ['storm', 'eye', 'lamp']) mats[n].emissive = true;
   for (const n of ['gun', 'metal']) mats[n].metal = true;

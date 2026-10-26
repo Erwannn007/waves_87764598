@@ -1,0 +1,32 @@
+{
+  "name": "waves",
+  "private": true,
+  "version": "0.2.0",
+  "type": "module",
+  "description": "Waves — survival shooter isométrique en pixel art (PWA)",
+  "scripts": {
+    "assets": "node tools/art-lab/export.mjs",
+    "assets:check": "node tools/assets/check.mjs",
+    "art:boards": "node tools/art-lab/build.mjs",
+    "art:blockout": "node tools/art-lab/export.mjs --blockout",
+    "predev": "npm run assets",
+    "dev": "vite",
+    "prebuild": "npm run assets && npm run assets:check",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "phaser": "^4.2.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.1",
+    "@types/node": "^22.20.5",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.5",
+    "vitest": "^5.0.5"
+  }
+}

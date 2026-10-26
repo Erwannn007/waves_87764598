@@ -143,3 +143,59 @@ export function encodeGIF(frames, delayCs) {
   bytes.push(0x3b);
   return Buffer.from(bytes);
 }
+
+/** Décodeur PNG minimal (8 bits ; types de couleur 2, 3, 6 ; non entrelacé). Pour importer les images retouchées. */
+export function decodePNG(buf) {
+  let p = 8;
+  let w = 0, h = 0, ct = 0, depth = 0, interlace = 0;
+  const idat = [];
+  let plte = null;
+  let trns = null;
+  while (p < buf.length) {
+    const len = buf.readUInt32BE(p);
+    const type = buf.toString('ascii', p + 4, p + 8);
+    const data = buf.subarray(p + 8, p + 8 + len);
+    if (type === 'IHDR') {
+      w = data.readUInt32BE(0); h = data.readUInt32BE(4); depth = data[8]; ct = data[9]; interlace = data[12];
+    } else if (type === 'PLTE') plte = data;
+    else if (type === 'tRNS') trns = data;
+    else if (type === 'IDAT') idat.push(data);
+    else if (type === 'IEND') break;
+    p += 12 + len;
+  }
+  if (depth !== 8 || interlace !== 0 || ![2, 3, 6].includes(ct)) throw new Error(`PNG non pris en charge (profondeur ${depth}, type ${ct}, entrelacement ${interlace}) : exporter en RGBA 8 bits`);
+  const bpp = ct === 6 ? 4 : ct === 2 ? 3 : 1;
+  const raw = zlib.inflateSync(Buffer.concat(idat));
+  const stride = w * bpp;
+  const px = Buffer.alloc(stride * h);
+  for (let y = 0; y < h; y++) {
+    const f = raw[y * (stride + 1)];
+    for (let x = 0; x < stride; x++) {
+      const r = raw[y * (stride + 1) + 1 + x];
+      const a = x >= bpp ? px[y * stride + x - bpp] : 0;
+      const b = y > 0 ? px[(y - 1) * stride + x] : 0;
+      const c = x >= bpp && y > 0 ? px[(y - 1) * stride + x - bpp] : 0;
+      let v;
+      if (f === 0) v = r;
+      else if (f === 1) v = r + a;
+      else if (f === 2) v = r + b;
+      else if (f === 3) v = r + ((a + b) >> 1);
+      else {
+        const pa = Math.abs(b - c), pb = Math.abs(a - c), pc = Math.abs(a + b - 2 * c);
+        v = r + (pa <= pb && pa <= pc ? a : pb <= pc ? b : c);
+      }
+      px[y * stride + x] = v & 0xff;
+    }
+  }
+  const out = new Uint8ClampedArray(w * h * 4);
+  for (let i = 0; i < w * h; i++) {
+    if (ct === 6) for (let k = 0; k < 4; k++) out[i * 4 + k] = px[i * 4 + k];
+    else if (ct === 2) { out.set(px.subarray(i * 3, i * 3 + 3), i * 4); out[i * 4 + 3] = 255; }
+    else {
+      const idx = px[i];
+      out.set(plte.subarray(idx * 3, idx * 3 + 3), i * 4);
+      out[i * 4 + 3] = trns && idx < trns.length ? trns[idx] : 255;
+    }
+  }
+  return { w, h, data: out };
+}

@@ -63,7 +63,7 @@ export function crop(src, x, y, w, h) {
 }
 
 // Police bitmap 3×5 maison (aucune licence tierce), utilisée pour les planches.
-const FONT = {
+export const FONT = {
   A: '.#. #.# ### #.# #.#', B: '##. #.# ##. #.# ##.', C: '.## #.. #.. #.. .##', D: '##. #.# #.# #.# ##.',
   E: '### #.. ##. #.. ###', F: '### #.. ##. #.. #..', G: '.## #.. #.# #.# .##', H: '#.# #.# ### #.# #.#',
   I: '### .#. .#. .#. ###', J: '..# ..# ..# #.# .#.', K: '#.# #.# ##. #.# #.#', L: '#.. #.. #.. #.. ###',

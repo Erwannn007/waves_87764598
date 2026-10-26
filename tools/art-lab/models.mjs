@@ -33,10 +33,10 @@ export function survivor(pose = {}, obj = 1) {
   const { yaw = Math.PI, phase = 0, stride = 0, recoil = 0, hit = 0, reload = 0, breathe = 0 } = pose;
   const aimYaw = pose.aimYaw ?? yaw;
   const rig = new Rig(obj);
-  const bob = stride * Math.abs(Math.sin(phase * TAU)) * 0.04 + breathe * 0.015;
-  const hipZ = 0.63 - stride * 0.025 + bob;
+  const hipZ = survivorHipZ(pose);
 
-  // Bas du corps : orienté selon le déplacement.
+  // Bas du corps : orienté selon le déplacement (calque « legs »).
+  rig.layer = 'legs';
   rig.push(rotZ(yaw));
   for (const [side, off] of [[1, 0], [-1, 0.5]]) {
     const ph = (phase + off) * TAU;
@@ -48,7 +48,8 @@ export function survivor(pose = {}, obj = 1) {
   rig.box([0, 0, hipZ + 0.11], [0.175, 0.125, 0.028], 'leather');
   rig.pop();
 
-  // Haut du corps : orienté selon la visée, penché en arrière en cas de dégât.
+  // Haut du corps : orienté selon la visée, penché en arrière en cas de dégât (calque « upper »).
+  rig.layer = 'upper';
   rig.push(rotZ(aimYaw));
   rig.push(rotX(hit * 0.35 - stride * 0.1), [0, 0, hipZ]);
   const tz = hipZ + 0.31;
@@ -62,8 +63,8 @@ export function survivor(pose = {}, obj = 1) {
   rig.ell([0, -0.045, hz + 0.005], [0.18, 0.16, 0.17], 'hair');
   rig.ell([0, -0.01, hz + 0.1], [0.19, 0.19, 0.095], 'cap');
   rig.box([0, -0.2, hz + 0.075], [0.11, 0.085, 0.016], 'cap', rotX(0.15));
-  for (const s of [-1, 1]) rig.decal([s * 0.065, 0.185, hz - 0.01], [24, 16, 22], { tolerance: 0.05 });
-  rig.decal([0, 0.18, hz - 0.1], [120, 58, 50], { tolerance: 0.05 });
+  for (const s of [-1, 1]) rig.decal([s * 0.065, 0.185, hz - 0.01], 'hair:0', { tolerance: 0.05 });
+  rig.decal([0, 0.18, hz - 0.1], 'skin:0', { tolerance: 0.05 });
   rig.pop();
   // Sac à dos et couverture roulée.
   rig.box([0, -0.2, tz + 0.02], [0.155, 0.08, 0.17], 'pack');
@@ -91,6 +92,11 @@ export function survivor(pose = {}, obj = 1) {
   rig.pop();
   rig.pop();
   return rig;
+}
+
+/** Hauteur des hanches du survivant : partagée avec l'export (décalage vertical du buste). */
+export function survivorHipZ({ phase = 0, stride = 0, breathe = 0 } = {}) {
+  return 0.63 - stride * 0.025 + stride * Math.abs(Math.sin(phase * TAU)) * 0.04 + breathe * 0.015;
 }
 
 /** Convertit un point monde dans le repère courant du rig. */
@@ -129,6 +135,7 @@ export function shambler(pose = {}, obj = 2) {
   rig.push(mmul(rotY(limp * 0.1 * stride), rotX(-hunch)), [0, 0, hipZ]);
   const tz = hipZ + 0.3;
   rig.ell([0, 0, tz], [0.23, 0.15, 0.24], 'zcloth');
+  rig.ell([0.1, 0.1, tz + 0.05], [0.09, 0.07, 0.1], 'zskin'); // chair visible par la chemise déchirée
   rig.ell([0.03, 0.05, tz - 0.12], [0.16, 0.11, 0.08], 'zskin');
   rig.ell([-0.13, 0.09, tz - 0.03], [0.07, 0.06, 0.09], 'zskin');
   // Excroissance cristalline (émissive) sur l'épaule gauche : signature visuelle de la famille.
@@ -138,9 +145,11 @@ export function shambler(pose = {}, obj = 2) {
   const hz = tz + 0.31;
   rig.push(rotX(0.1 + hit * 0.45), [0, 0.05, tz + 0.2]);
   rig.sphere([0, 0.1, hz], 0.17, 'zskin');
-  rig.ell([0, 0.19, hz - 0.1], [0.11, 0.08, 0.06], 'zskin');
-  for (const s of [-1, 1]) rig.decal([s * 0.065, 0.265, hz + 0.01], [255, 122, 244], { tolerance: 0.06 });
-  rig.decal([0, 0.27, hz - 0.11], [36, 18, 30], { tolerance: 0.05 });
+  rig.ell([0, 0.2, hz + 0.06], [0.15, 0.07, 0.045], 'zskin'); // arcade sourcilière lourde
+  rig.ell([0, 0.19, hz - 0.11], [0.12, 0.09, 0.065], 'zskin', rotX(0.25)); // mâchoire pendante
+  rig.ell([0.08, 0.05, hz + 0.1], [0.05, 0.05, 0.05], 'storm'); // éclat de cristal sur le crâne
+  for (const s of [-1, 1]) rig.decal([s * 0.065, 0.27, hz + 0.01], 'eye:2', { tolerance: 0.07 });
+  rig.decal([0, 0.27, hz - 0.12], 'zcloth:0', { tolerance: 0.05 });
   rig.pop();
   // Bras longs tendus ; balancement en marche, coup descendant pendant l'attaque.
   const reach = 0.44 + (attack >= 0.5 ? swing * 0.2 : -swing * 0.15);
@@ -203,4 +212,47 @@ export function lamp(rig, x, y) {
   rig.cap([x, y, 3.0], [x + 0.55, y, 3.05], 0.05, 'metal');
   rig.box([x + 0.6, y, 2.98], [0.14, 0.08, 0.05], 'metal');
   rig.box([x + 0.6, y, 2.92], [0.1, 0.05, 0.015], 'lamp');
+}
+
+export function carWreck(rig, x, y, yaw = 0) {
+  rig.push(rotZ(yaw), [0, 0, 0], [x, y, 0]);
+  rig.box([0, 0, 0.5], [1.05, 0.85, 0.3], 'rust');
+  rig.box([0.05, 0, 0.88], [0.55, 0.75, 0.12], 'rust', rotY(0.04));
+  rig.box([0.05, 0, 0.84], [0.5, 0.78, 0.07], 'glass');
+  rig.box([-0.85, 0, 0.62], [0.22, 0.86, 0.1], 'rust', rotY(-0.18)); // capot enfoncé
+  for (const sx of [-0.65, 0.65])
+    for (const sy of [-0.82, 0.82]) rig.ell([sx, sy, 0.26], [0.26, 0.1, 0.26], 'zpants');
+  rig.box([1.07, 0, 0.45], [0.03, 0.7, 0.08], 'metal');
+  rig.pop();
+}
+
+export function deadTree(rig, x, y) {
+  rig.cap([x, y, 0], [x + 0.05, y, 1.9], 0.13, 'bark');
+  rig.cap([x + 0.03, y, 1.1], [x - 0.6, y + 0.2, 1.75], 0.06, 'bark');
+  rig.cap([x + 0.04, y, 1.45], [x + 0.55, y - 0.25, 2.15], 0.055, 'bark');
+  rig.cap([x + 0.05, y, 1.85], [x - 0.15, y - 0.3, 2.45], 0.045, 'bark');
+  rig.cap([x - 0.6, y + 0.2, 1.75], [x - 0.85, y + 0.1, 2.0], 0.035, 'bark');
+}
+
+export function rubble(rig, x, y) {
+  const bits = [[0, 0, 0.35, 0.3, 0.12, 0.2], [0.35, 0.15, 0.2, 0.18, 0.1, -0.5], [-0.3, 0.2, 0.22, 0.16, 0.14, 0.9], [0.1, -0.3, 0.25, 0.12, 0.08, 1.4]];
+  for (const [dx, dy, hx, hy, hz, a] of bits) rig.box([x + dx, y + dy, hz], [hx, hy, hz], 'concrete', rotZ(a));
+}
+
+/** Barricade destructible : 'intact' | 'damaged' | 'destroyed'. */
+export function barricadeState(rig, x, y, state = 'intact', yaw = 0) {
+  rig.push(rotZ(yaw), [0, 0, 0], [x, y, 0]);
+  if (state === 'destroyed') {
+    rig.box([-0.7, 0, 0.18], [0.06, 0.06, 0.18], 'woodDark', rotY(0.3));
+    rig.box([0.7, 0, 0.12], [0.06, 0.06, 0.12], 'woodDark');
+    rig.box([0.1, 0.25, 0.03], [0.85, 0.1, 0.025], 'wood', rotZ(0.25));
+    rig.box([-0.2, -0.2, 0.03], [0.6, 0.1, 0.025], 'wood', rotZ(-0.4));
+    rig.box([0.5, -0.3, 0.06], [0.3, 0.08, 0.025], 'wood', mmul(rotZ(1.2), rotX(0.3)));
+  } else {
+    for (const sx of [-0.7, 0.7]) rig.box([sx, 0, 0.5], [0.06, 0.06, 0.5], 'woodDark');
+    const planks = state === 'intact' ? [[0.3, 0.05], [0.58, -0.07], [0.86, 0.1]] : [[0.3, 0.05], [0.7, -0.35]];
+    for (const [z, roll] of planks) rig.box([0, 0.08, z], [0.9, 0.025, 0.1], 'wood', rotY(roll));
+    if (state === 'damaged') rig.box([0.4, 0.3, 0.03], [0.4, 0.09, 0.025], 'wood', rotZ(0.5));
+  }
+  rig.pop();
 }

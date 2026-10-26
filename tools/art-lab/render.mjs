@@ -43,6 +43,18 @@ export class Rig {
     this.decals = [];
     this.stack = [{ M: I3, t: [0, 0, 0] }];
     this.obj = obj;
+    this.layer = null;
+  }
+  _add(p) {
+    p.layer = this.layer;
+    this.prims.push(p);
+  }
+  /** Ne garde que les primitives (et décalques) d'un calque donné. */
+  only(layer) {
+    const r = Object.create(this);
+    r.prims = this.prims.filter((p) => p.layer === layer);
+    r.decals = this.decals.filter((d) => d.layer === layer);
+    return r;
   }
   get T() {
     return this.stack[this.stack.length - 1];
@@ -61,22 +73,22 @@ export class Rig {
     return this;
   }
   sphere(c, r, mat) {
-    this.prims.push({ type: 'ell', c: this.P(c), r: [r, r, r], M: this.T.M, mat, obj: this.obj });
+    this._add({ type: 'ell', c: this.P(c), r: [r, r, r], M: this.T.M, mat, obj: this.obj });
   }
   ell(c, r, mat, R = I3) {
-    this.prims.push({ type: 'ell', c: this.P(c), r, M: mmul(this.T.M, R), mat, obj: this.obj });
+    this._add({ type: 'ell', c: this.P(c), r, M: mmul(this.T.M, R), mat, obj: this.obj });
   }
   cap(a, b, r, mat) {
-    this.prims.push({ type: 'cap', a: this.P(a), b: this.P(b), r, mat, obj: this.obj });
+    this._add({ type: 'cap', a: this.P(a), b: this.P(b), r, mat, obj: this.obj });
   }
   cyl(c, r, h, mat) {
-    this.prims.push({ type: 'cyl', c: this.P(c), r, h, mat, obj: this.obj });
+    this._add({ type: 'cyl', c: this.P(c), r, h, mat, obj: this.obj });
   }
   box(c, h, mat, R = I3) {
-    this.prims.push({ type: 'box', c: this.P(c), h, M: mmul(this.T.M, R), mat, obj: this.obj });
+    this._add({ type: 'box', c: this.P(c), h, M: mmul(this.T.M, R), mat, obj: this.obj });
   }
   decal(p, color, opts = {}) {
-    this.decals.push({ p: this.P(p), color, ...opts });
+    this.decals.push({ p: this.P(p), color, layer: this.layer, ...opts });
   }
 }
 
@@ -210,6 +222,7 @@ export function project(view, p) {
  */
 export function render(o) {
   const { w, h, cam, ppu, materials, style, prims, decals = [], ground, blobs = [] } = o;
+  const shadowPrims = o.shadowPrims ?? prims.filter((p) => p.shadow);
   const target = o.target ?? [0, 0, 0];
   const [ax, ay] = o.anchor;
   const L = v.norm(style.light);
@@ -238,9 +251,11 @@ export function render(o) {
         const tg = -O[2] / cam.d[2];
         if (!best || tg < best.t) {
           const G = v.add(O, v.mul(cam.d, tg));
-          const g = ground(G[0], G[1], i, j);
+          const shadowed = shadowPrims.length > 0 && castShadow(G, L, shadowPrims);
+          const g = ground(G[0], G[1], i, j, shadowed);
+          if (!g) continue;
           let idx = g.idx;
-          if (prims.length && castShadow(G, L, prims)) idx = Math.max(0, idx - 2);
+          if (shadowed && !g.shadowHandled) idx = Math.max(0, idx - 2);
           for (const b of blobs) {
             const dx = (G[0] - b.c[0]) / b.rx;
             const dy = (G[1] - b.c[1]) / b.ry;
@@ -336,7 +351,8 @@ export function render(o) {
     const k = j * w + i;
     // Les profondeurs du tampon sont mesurées depuis un plan situé 60 m en amont de la cible.
     const vis = dc.always || 60 + pd <= depth[k] + (dc.tolerance ?? 0.06);
-    if (vis && (dc.always || objBuf[k] > 0)) setPx(img, i, j, dc.color);
+    const color = typeof dc.color === 'string' ? materials[dc.color.split(':')[0]].ramp[+dc.color.split(':')[1]] : dc.color;
+    if (vis && (dc.always || objBuf[k] > 0)) setPx(img, i, j, color);
   }
 
   return { img, depth, obj: objBuf, view };
@@ -345,7 +361,6 @@ export function render(o) {
 function castShadow(G, L, prims) {
   const O = v.add(G, v.mul(L, 0.001));
   for (const p of prims) {
-    if (!p.shadow) continue;
     const hit = HIT[p.type](p, O, L);
     if (hit && hit.t > 0.001) return true;
   }

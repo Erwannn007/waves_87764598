@@ -1,0 +1,18 @@
+{
+  "rodeur": {
+    "name": "Rôdeur",
+    "sprite": "rodeur",
+    "hp": 110,
+    "radius": 0.3,
+    "speed": 1.45,
+    "chaseSpeed": 2.05,
+    "aggroRange": 26,
+    "attackRange": 0.9,
+    "attackDamage": 14,
+    "attackWindup": 0.36,
+    "attackCooldown": 1.1,
+    "staggerThreshold": 100,
+    "stunTime": 1.3,
+    "knockbackResist": 0
+  }
+}

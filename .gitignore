@@ -5,3 +5,7 @@ dist/
 .env*
 test-results/
 playwright-report/
+# Assets générés (reconstruits par `npm run assets`, y compris en CI)
+public/assets/gen/
+public/icons/
+assets-src/characters/*/blockout/
